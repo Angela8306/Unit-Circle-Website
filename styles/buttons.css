@@ -1,0 +1,10 @@
+#button-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.buttons {
+    flex: 1;
+    font-family: Sono, sans-serif;
+    font-size: 14px;
+}
