@@ -110,7 +110,7 @@ input[type="checkbox"]:checked:after {
 }
 
 #ui-q {
-    display: grid;
+    display: flex;
 }
 
 #button-section {
