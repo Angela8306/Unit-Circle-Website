@@ -1,0 +1,82 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Sono', sans-serif;
+}
+
+#main {
+    display: grid;
+    grid-template-rows: 50px 1fr 50px;
+}
+
+#history {
+    display: grid;
+    grid-template-rows: 5vh 1fr 5vh;
+    background-color: rgb(237, 205, 187);
+    padding-top: 5px;
+}
+#question-list {
+    padding-left: 40px;
+}
+
+#history-footer {
+    padding-left: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#pg-num {
+    align-self: center;
+}
+
+.arrow-button {
+    border: none;
+    margin: 5px;
+    flex: 1;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 250ms;
+}
+
+.arrow-button:hover,
+.arrow-button:focus-visible {
+    background: rgb(227, 183, 160);
+}
+
+#toggle-section {
+    display: flex;
+    flex-direction: column;
+}
+
+#ui-q {
+    display: grid;
+}
+
+#button-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1vw;
+}
+
+.btn {
+    flex: 1;
+    font-size: 16px;
+    border: none;
+    border-radius: 7px;
+    background: rgb(115, 144, 114);
+    padding: 0.75em 3em;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 250ms;
+}
+
+.btn:hover,
+.btn:focus-visible {
+    background: rgb(79, 111, 82);
+}
