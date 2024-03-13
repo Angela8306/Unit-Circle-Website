@@ -6,7 +6,7 @@
 
 #main {
     display: grid;
-    grid-template-rows: 50px 1fr 50px;
+    grid-template-rows: 50px 1fr;
 }
 
 #history {
@@ -113,21 +113,47 @@ input[type="checkbox"]:checked:after {
     display: flex;
 }
 
-#button-section {
+#question-main {
+    flex: 1;
+    padding: 10vh;
+    margin: 10vh;
+    background-color: rgb(237, 205, 187);
+    border-radius: 10px;
+}
+
+.answer-choice {
+    width: 100%;
+    border: none;
+    background-color: rgb(227, 183, 160);
+    padding: 10px;
+    margin: 10px 0;
+    text-align: left;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 250ms;
+}
+
+.answer-choice:hover {
+    background-color: rgb(215, 151, 113);
+}
+
+#hint {
+    flex: 1;
+}
+
+#btn-section {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1vw;
+    justify-content: space-between;
 }
 
 .btn {
-    flex: 1;
+    width: auto;
     font-size: 16px;
     border: none;
     border-radius: 7px;
     background: rgb(115, 144, 114);
     padding: 0.75em 3em;
-    margin: 5px;
+    margin: 5px 0;
     cursor: pointer;
     transition: background-color 250ms;
 }
@@ -135,4 +161,11 @@ input[type="checkbox"]:checked:after {
 .btn:hover,
 .btn:focus-visible {
     background: rgb(79, 111, 82);
+}
+
+#next-button {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    font-size: 14;
 }
