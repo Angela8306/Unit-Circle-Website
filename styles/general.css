@@ -138,11 +138,18 @@ input[type="checkbox"]:checked:after {
 }
 
 #hint {
+    display: flex;
     flex: 1;
     background-color: rgb(169, 179, 136);
     padding: 10vh;
     margin: 10vh;
     border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+#line-container {
+    background-color: antiquewhite;
 }
 
 #btn-section {
