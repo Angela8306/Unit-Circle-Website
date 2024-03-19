@@ -7,9 +7,9 @@ angles.forEach(makeLines)
 function makeLines(angle) {
     const newLine = originalLine.cloneNode(true);
 
-    newLine.setAttribute("id", "line-" + angle)
+    newLine.setAttribute("id", `line-${angle}`)
 
-    newLine.setAttribute("transform", "rotate(" + -angle + " 250 250)");
+    newLine.setAttribute("transform", `rotate(${-angle} 250 250)`);
 
     newLine.setAttribute("style", "stroke: rgb(79, 111, 82); stroke-width: 1.5;");
 
