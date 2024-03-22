@@ -13,7 +13,6 @@ function makeLines(angle) {
 
     newLine.setAttribute("style", "stroke: rgb(79, 111, 82); stroke-width: 1.5;");
 
-    // Append the cloned line to the SVG container
     document.getElementById("line-container").appendChild(newLine);
     
 };
