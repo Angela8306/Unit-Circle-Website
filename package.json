@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "random": "^4.1.0",
+    "random-js": "^2.1.0"
+  }
+}

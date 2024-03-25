@@ -139,6 +139,7 @@ input[type="checkbox"]:checked:after {
 
 #hint {
     display: flex;
+    position: relative;
     /* flex: 1; */
     background-color: rgb(169, 179, 136);
     padding: 5vh;
@@ -146,6 +147,26 @@ input[type="checkbox"]:checked:after {
     border-radius: 10px;
     align-items: center;
     justify-content: center;
+}
+
+#x-hint-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: none;
+    background-color: transparent;
+    color: rgb( 58, 77, 57);
+    font-size: 24px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 250ms;
+}
+
+#x-hint-btn:hover,
+#x-hint-btn:focus-visible {
+    background: rgb(115, 144, 114);
 }
 
 #line-container {
