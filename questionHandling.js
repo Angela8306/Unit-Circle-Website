@@ -1,13 +1,18 @@
-import random from 'random'
-
 class UnitCircle {
-    constructor(radians, degrees, positive, negative, simple, complex) {
-        this.radians = true;
-        this.degrees = false;
-        this.positive = true;
-        this.negative = false;
-        this.simple = true;
-        this.complex = false;
+    constructor() {
+        this.radians = document.getElementById("rad");
+        this.radians.checked = true;
+        this.degrees = document.getElementById("deg");
+        this.degrees.checked = false;
+        this.positive = document.getElementById("pos");
+        this.positive.checked = true;
+        this.negative = document.getElementById("neg");
+        this.negative.checked = false;
+        this.simple = document.getElementById("simple");
+        this.simple.checked = true;
+        this.complex = document.getElementById("complex");
+        this.complex.checked = false;
+
         this.deg_to_rad = {
             "0" : "0",
             "30" : "π/6",
@@ -54,11 +59,8 @@ class UnitCircle {
 }
 
 class Question {
-    constructor(unit_circle) {
-        this.unit_circle = unit_circle;
-        this.current_question = [];
-        this.current_answer_choices = [];
-        this.correct_answer = null;
+    constructor() {
+        this.unit_circle = new UnitCircle();
 
         this.norm_answer_choices = ["√3/2", "√2/2", "1/2"];
         this.tan_answer_choices = ["√3/3", "1", "√3"];
@@ -71,6 +73,11 @@ class Question {
 
         this.total_count = 0;
         this.correct_count = 0;
+
+        this.current_question = [];
+        this.current_answer_choices = [];
+        this.correct_answer = this.generateQuestion();
+        this.updateUI();
     }
 
     generateQuestion() {
@@ -85,7 +92,7 @@ class Question {
         } else {
             xy_key = this.current_question[1];
         }
-        this.correct_answer = this.unit_circle[`${xy_key}`][this.stems.indexOf(this.current_question[0])];
+        this.correct_answer = this.unit_circle.xy_pts[`${xy_key}`][this.stems.indexOf(this.current_question[0])];
 
         return this.correct_answer
     }
@@ -94,23 +101,24 @@ class Question {
         let stem_choices = [];
         let rad_deg = [];
 
-        if (this.unit_circle.simple && !this.unit_circle.complex) {
+        if (this.unit_circle.simple.checked && !this.unit_circle.complex.checked) {
             stem_choices = this.stems.slice(0,3);
-        } else if (this.unit_circle.complex && !this.unit_circle.simple) {
+        } else if (this.unit_circle.complex.checked && !this.unit_circle.simple.checked) {
             stem_choices = this.stems.slice(3, -1);
         } else {
             stem_choices = this.stems.slice();
         }
-
-        if (this.unit_circle.radians && !this.unit_circle.degrees) {
-            rad_deg = this.unit_circle.radians;
-        } else if (this.unit_circle.degrees && !this.unit_circle.radians) {
-            rad_deg = this.unit_circle.degrees;
+        
+        rad_deg = [this.unit_circle.rad_array, this.unit_circle.deg_array].random();
+        if (this.unit_circle.radians.checked && !this.unit_circle.degrees.checked) {
+            rad_deg = this.unit_circle.rad_array;
+        } else if (this.unit_circle.degrees.checked && !this.unit_circle.radians.checked) {
+            rad_deg = this.unit_circle.deg_array;
         } else {
-            rad_deg = random.choice([this.unit_circle.radians, this.unit_circle.degrees]);
+            rad_deg = [this.unit_circle.rad_array, this.unit_circle.deg_array].random();
         }
 
-        this.current_question = [random.choice(stem_choices), random.choice(rad_deg)];
+        this.current_question = [stem_choices.random(), rad_deg.random()];
         
         if (this.current_question[0] === "tan") {
             this.pick_list = this.tan_answer_choices;
@@ -129,7 +137,7 @@ class Question {
         let og = this.pick_list.slice();
         let choices = [];
         for (let i = 0; i < 2; i++) {
-            let pick = random.choice(og);
+            let pick = og.random();
             choices.push(pick);
             let ind = og.indexOf(pick);
             if (ind > -1) {
@@ -140,4 +148,36 @@ class Question {
         choices.push("None of the Above")
         return choices;
     }
+
+    checkAnswer() {
+        
+    }
+
+    updateUI() {
+        // this.updateSettings();
+        document.getElementById("question").innerHTML = `${this.current_question[0]}(${this.current_question[1]})?`;
+        for (const [index, ans] of this.current_answer_choices.entries()) {
+            document.getElementById(`a${index + 1}`).innerHTML = ans;
+        }
+    }
+
+    // updateSettings() {
+    //     let rad = document.getElementById("rad");
+    //     let deg = document.getElementById("deg");
+    //     let pos = document.getElementById("pos");
+    //     let neg = document.getElementById("neg");
+    //     let simple = document.getElementById("simple");
+    //     let complex = document.getElementById("complex");
+    //     let arrDocSettings = [rad, deg, pos, neg, simple, complex];
+
+    //     for (let [index, checkbox] of arrDocSettings.entries()) {
+    //         this.unit_circle.arrSettings[index] = checkbox.checked;
+    //     }
+    // }
 }
+
+Array.prototype.random = function() {
+    return this[Math.floor((Math.random()*this.length))]
+}
+
+let application = new Question;
