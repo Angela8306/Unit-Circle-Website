@@ -47,6 +47,9 @@ class UnitCircle {
             "330" : ["√3/2", "-1/2", "-√3/3"],
             "360" : ["1", "0", "0"]
         };
+
+        this.deg_array = Object.keys(this.deg_to_rad);
+        this.rad_array = Object.values(this.deg_to_rad)
     }
 }
 
@@ -55,6 +58,8 @@ class Question {
         this.unit_circle = unit_circle;
         this.current_question = [];
         this.current_answer_choices = [];
+        this.correct_answer = null;
+
         this.norm_answer_choices = ["√3/2", "√2/2", "1/2"];
         this.tan_answer_choices = ["√3/3", "1", "√3"];
         this.extreme_norm_answer_choices = ["1", "0"];
@@ -72,10 +77,17 @@ class Question {
         this.total_count += 1;
         this.generateQuestionSettings();
         this.current_answer_choices = this.generateAnswerChoices();
+        let xy_key = null;
 
         if (this.current_question[1].includes("π")) {
-            
+            const ind = this.unit_circle.rad_array.indexOf(this.current_question[1]);
+            xy_key = this.unit_circle.deg_array[ind];
+        } else {
+            xy_key = this.current_question[1];
         }
+        this.correct_answer = this.unit_circle[`${xy_key}`][this.stems.indexOf(this.current_question[0])];
+
+        return this.correct_answer
     }
 
     generateQuestionSettings() {
