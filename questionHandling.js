@@ -74,14 +74,18 @@ class Question {
         this.total_count = 0;
         this.correct_count = 0;
 
+        this.submitted = false;
+
         this.current_question = [];
         this.current_answer_choices = [];
         this.correct_answer = this.generateQuestion();
         this.updateUI();
+        this.checkEvents();
     }
 
     generateQuestion() {
         this.total_count += 1;
+        this.submitted = false;
         this.generateQuestionSettings();
         this.current_answer_choices = this.generateAnswerChoices();
         let xy_key = null;
@@ -92,7 +96,16 @@ class Question {
         } else {
             xy_key = this.current_question[1];
         }
+
+        console.log(`xykey: ${xy_key}`)
         this.correct_answer = this.unit_circle.xy_pts[`${xy_key}`][this.stems.indexOf(this.current_question[0])];
+
+        console.log(`actual answer: ${this.correct_answer}`)
+
+        if (!this.current_answer_choices.includes(this.correct_answer)){
+            this.correct_answer = this.current_answer_choices[-1]
+            console.log(`answer is "None of the Above"`)
+        }
 
         return this.correct_answer
     }
@@ -150,7 +163,50 @@ class Question {
     }
 
     checkAnswer() {
-        
+        const chosenAnswer = document.getElementsByClassName("chosen-answer-choice")[0];
+        console.log(chosenAnswer.innerHTML)
+        console.log(this.correct_answer)
+        if (chosenAnswer.innerHTML === this.correct_answer){
+            chosenAnswer.style.border = "3px solid rgb(79, 111, 82)"
+        } else {
+            const ansChoices = document.getElementsByClassName("answer-choice");
+            for (const ansChoice of ansChoices) {
+                if (ansChoice.innerHTML === this.correct_answer) {
+                    ansChoice.style.border = "3px solid rgb(79, 111, 82)"
+                    chosenAnswer.style.border = "3px solid rgb(183, 66, 66)"
+                }
+            }
+        }
+    }
+
+    submitClicked(event) {
+        this.submitted = true;
+        const next = document.getElementById("next-button");
+        next.style.opacity = "100";
+        next.style.cursor = "pointer";
+        event.target.style.opacity = "50%";
+        event.target.style.cursor = "not-allowed";
+    }
+
+    answerChoiceClicked(event) {
+        let allChosen = document.getElementsByClassName("chosen-answer-choice");
+        if (allChosen[0]) {
+            allChosen[0].classList.remove("chosen-answer-choice");
+        }
+        event.target.classList.add("chosen-answer-choice");
+    }
+
+    checkEvents() {
+        const submit = document.getElementById("submit-button");
+        submit.addEventListener("click", this.submitClicked);
+        // figure out closure for submitClicked to call this.checkAnswer correctly
+
+        const hint = document.getElementById("hint-button");
+
+        for (const ansChoice of document.getElementsByClassName("answer-choice")) {
+            ansChoice.addEventListener("click", this.answerChoiceClicked)
+        }
+
     }
 
     updateUI() {
