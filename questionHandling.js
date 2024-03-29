@@ -103,7 +103,7 @@ class Question {
         console.log(`actual answer: ${this.correct_answer}`)
 
         if (!this.current_answer_choices.includes(this.correct_answer)){
-            this.correct_answer = this.current_answer_choices[-1]
+            this.correct_answer = this.current_answer_choices.slice(-1)[0]
             console.log(`answer is "None of the Above"`)
         }
 
@@ -164,28 +164,23 @@ class Question {
 
     checkAnswer() {
         const chosenAnswer = document.getElementsByClassName("chosen-answer-choice")[0];
-        console.log(chosenAnswer.innerHTML)
-        console.log(this.correct_answer)
         if (chosenAnswer.innerHTML === this.correct_answer){
-            chosenAnswer.style.border = "3px solid rgb(79, 111, 82)"
+            chosenAnswer.style.border = "3px solid rgb(79, 111, 82)";
+            chosenAnswer.style.backgroundColor = "rgb(169, 179, 136)";
+            this.correct_count += 1;
         } else {
             const ansChoices = document.getElementsByClassName("answer-choice");
             for (const ansChoice of ansChoices) {
+                console.log(typeof this.correct_answer)
                 if (ansChoice.innerHTML === this.correct_answer) {
-                    ansChoice.style.border = "3px solid rgb(79, 111, 82)"
-                    chosenAnswer.style.border = "3px solid rgb(183, 66, 66)"
+                    ansChoice.style.border = "3px solid rgb(79, 111, 82)";
+                    ansChoice.style.backgroundColor = "rgb(169, 179, 136)";
+                    
+                    chosenAnswer.style.border = "3px solid rgb(183, 66, 66)";
+                    chosenAnswer.style.backgroundColor = "rgb(234, 115, 98)";
                 }
             }
         }
-    }
-
-    submitClicked(event) {
-        this.submitted = true;
-        const next = document.getElementById("next-button");
-        next.style.opacity = "100";
-        next.style.cursor = "pointer";
-        event.target.style.opacity = "50%";
-        event.target.style.cursor = "not-allowed";
     }
 
     answerChoiceClicked(event) {
@@ -198,8 +193,17 @@ class Question {
 
     checkEvents() {
         const submit = document.getElementById("submit-button");
+        this.submitClicked = (event) => {
+            this.submitted = true;
+            const next = document.getElementById("next-button");
+            next.style.opacity = "100";
+            next.style.cursor = "pointer";
+            event.target.style.opacity = "50%";
+            event.target.style.cursor = "not-allowed";
+
+            this.checkAnswer();
+        }
         submit.addEventListener("click", this.submitClicked);
-        // figure out closure for submitClicked to call this.checkAnswer correctly
 
         const hint = document.getElementById("hint-button");
 
