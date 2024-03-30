@@ -145,13 +145,14 @@ input[type="checkbox"]:checked:after {
 #hint {
     display: flex;
     position: relative;
-    /* flex: 1; */
     background-color: rgb(169, 179, 136);
     padding: 5vh;
     margin: auto;
     border-radius: 10px;
     align-items: center;
     justify-content: center;
+    transition: all 250ms;
+    opacity: 0;
 }
 
 #x-hint-btn {

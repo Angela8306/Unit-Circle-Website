@@ -58,9 +58,29 @@ class UnitCircle {
     }
 }
 
+class History {
+    constructor() {
+        this.question_list = document.getElementById("question-list");
+        this.answers = [];
+    }
+
+    addQuestion(question, answer) {
+        let newQuestion = document.createElement("li");
+        const text = document.createTextNode(`${question}`);
+        newQuestion.appendChild(text);
+        this.question_list.appendChild(newQuestion);
+        this.answers.append(answer)
+    }
+
+    showAnswerToolTip() {
+
+    }
+}
+
 class Question {
     constructor() {
         this.unit_circle = new UnitCircle();
+        this.history = new History()
 
         this.norm_answer_choices = ["√3/2", "√2/2", "1/2"];
         this.tan_answer_choices = ["√3/3", "1", "√3"];
@@ -75,6 +95,8 @@ class Question {
         this.correct_count = 0;
 
         this.submitted = false;
+        this.hintActive = false;
+        this.hintUsed = false;
 
         this.current_question = [];
         this.current_answer_choices = [];
@@ -100,6 +122,7 @@ class Question {
         console.log(`xykey: ${xy_key}`)
         this.correct_answer = this.unit_circle.xy_pts[`${xy_key}`][this.stems.indexOf(this.current_question[0])];
 
+        // add correct answer that looks like a tool tip when hovering history question
         console.log(`actual answer: ${this.correct_answer}`)
 
         if (!this.current_answer_choices.includes(this.correct_answer)){
@@ -162,6 +185,10 @@ class Question {
         return choices;
     }
 
+    generateHint() {
+        
+    }
+
     checkAnswer() {
         const chosenAnswer = document.getElementsByClassName("chosen-answer-choice")[0];
         if (chosenAnswer.innerHTML === this.correct_answer){
@@ -195,6 +222,7 @@ class Question {
         const submit = document.getElementById("submit-button");
         this.submitClicked = (event) => {
             this.submitted = true;
+            console.log("submit was clicked!")
             const next = document.getElementById("next-button");
             next.style.opacity = "100";
             next.style.cursor = "pointer";
@@ -206,34 +234,49 @@ class Question {
         submit.addEventListener("click", this.submitClicked);
 
         const hint = document.getElementById("hint-button");
+        const hintContainer = document.getElementById("hint");
+        hintContainer.style.display = "none";
+        this.hintClicked = (event) => {
+            this.hintUsed = true;
+            this.hintActive = !this.hintActive;
+            console.log("Hint was clicked")
+            if (this.hintActive) {
+                console.log("hint showing")
+                hintContainer.style.display = "flex";
+                hintContainer.style.opacity = "100%";
+            } else {
+                console.log("hint hiding")
+                hintContainer.style.display = "none";
+                hintContainer.style.opacity = "0";
+            }
+        }
+        hint.addEventListener("click", this.hintClicked);
+
+        const close_hint_btn = document.getElementById("x-hint-btn");
+        this.close_hint = (event) => {
+            this.hintActive = false;
+            hintContainer.style.display = "none";
+        }
+        close_hint_btn.addEventListener("click", this.close_hint);
 
         for (const ansChoice of document.getElementsByClassName("answer-choice")) {
             ansChoice.addEventListener("click", this.answerChoiceClicked)
         }
 
+        const next = document.getElementById("next-button");
+        this.launchNextQuestion = (event) => {
+
+        }
+        next.addEventListener("click", this.launchNextQuestion);
+
     }
 
     updateUI() {
-        // this.updateSettings();
         document.getElementById("question").innerHTML = `${this.current_question[0]}(${this.current_question[1]})?`;
         for (const [index, ans] of this.current_answer_choices.entries()) {
             document.getElementById(`a${index + 1}`).innerHTML = ans;
         }
     }
-
-    // updateSettings() {
-    //     let rad = document.getElementById("rad");
-    //     let deg = document.getElementById("deg");
-    //     let pos = document.getElementById("pos");
-    //     let neg = document.getElementById("neg");
-    //     let simple = document.getElementById("simple");
-    //     let complex = document.getElementById("complex");
-    //     let arrDocSettings = [rad, deg, pos, neg, simple, complex];
-
-    //     for (let [index, checkbox] of arrDocSettings.entries()) {
-    //         this.unit_circle.arrSettings[index] = checkbox.checked;
-    //     }
-    // }
 }
 
 Array.prototype.random = function() {
