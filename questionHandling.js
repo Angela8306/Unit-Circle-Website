@@ -29,8 +29,7 @@ class UnitCircle {
             "270" : "3π/2",
             "300" : "5π/3",
             "315" : "7π/4",
-            "330" : "11π/6",
-            "360" : "2π"
+            "330" : "11π/6"
         }
 
         this.xy_pts = {
@@ -49,8 +48,7 @@ class UnitCircle {
             "270" : ["0", "-1", "Undefined"],
             "300" : ["1/2", "-√3/2", "-√3"],
             "315" : ["√2/2", "-√2/2", "-1"],
-            "330" : ["√3/2", "-1/2", "-√3/3"],
-            "360" : ["1", "0", "0"]
+            "330" : ["√3/2", "-1/2", "-√3/3"]
         };
 
         this.deg_array = Object.keys(this.deg_to_rad);
@@ -69,7 +67,7 @@ class History {
         const text = document.createTextNode(`${question}`);
         newQuestion.appendChild(text);
         this.question_list.appendChild(newQuestion);
-        this.answers.append(answer)
+        this.answers.push(answer)
     }
 
     showAnswerToolTip() {
@@ -87,7 +85,7 @@ class Question {
         this.extreme_norm_answer_choices = ["1", "0"];
         this.extreme_tan_answer_choices = ["0", "Undefined"];
 
-        this.extreme_possibilites = ["0", "90", "180", "270", "360", "π/2", "π", "3π/2", "2π"];
+        this.extreme_possibilites = ["0", "90", "180", "270", "π/2", "π", "3π/2"];
         this.stems = ["cos", "sin", "tan", "sec", "csc", "cot"];
         this.pick_list = [];
 
@@ -130,6 +128,7 @@ class Question {
             console.log(`answer is "None of the Above"`)
         }
 
+        this.generateHint(xy_key);
         return this.correct_answer
     }
 
@@ -185,12 +184,20 @@ class Question {
         return choices;
     }
 
-    generateHint() {
-        
+    generateHint(xy_key) {
+        // console.log(this.current_question)
+        const current_line = document.getElementById(`line-${xy_key}`);
+        current_line.style.stroke = "rgb(255, 237, 219)";
+        current_line.style.strokeWidth = "2";
     }
 
     checkAnswer() {
-        const chosenAnswer = document.getElementsByClassName("chosen-answer-choice")[0];
+        let chosenAnswer = false;
+        for (let ansChoice of document.getElementsByClassName("answer-choice")) {
+            if (ansChoice.style.border === "3px solid rgb(176, 91, 59)") {
+                chosenAnswer = ansChoice;
+            }
+        }
         if (chosenAnswer.innerHTML === this.correct_answer){
             chosenAnswer.style.border = "3px solid rgb(79, 111, 82)";
             chosenAnswer.style.backgroundColor = "rgb(169, 179, 136)";
@@ -198,7 +205,6 @@ class Question {
         } else {
             const ansChoices = document.getElementsByClassName("answer-choice");
             for (const ansChoice of ansChoices) {
-                console.log(typeof this.correct_answer)
                 if (ansChoice.innerHTML === this.correct_answer) {
                     ansChoice.style.border = "3px solid rgb(79, 111, 82)";
                     ansChoice.style.backgroundColor = "rgb(169, 179, 136)";
@@ -211,19 +217,21 @@ class Question {
     }
 
     answerChoiceClicked(event) {
-        let allChosen = document.getElementsByClassName("chosen-answer-choice");
-        if (allChosen[0]) {
-            allChosen[0].classList.remove("chosen-answer-choice");
+        const ansChoices = document.getElementsByClassName("answer-choice");
+        for (let ansChoice of ansChoices) {
+            ansChoice.style.border = "solid 3px transparent";
+            ansChoice.style.backgroundColor = "rgb(227, 183, 160)";
         }
-        event.target.classList.add("chosen-answer-choice");
+        event.target.style.border = "3px solid rgb(176, 91, 59)";
+        event.target.style.backgroundColor = "rgb(215, 151, 113)";
     }
 
     checkEvents() {
         const submit = document.getElementById("submit-button");
+        const next = document.getElementById("next-button");
         this.submitClicked = (event) => {
             this.submitted = true;
-            console.log("submit was clicked!")
-            const next = document.getElementById("next-button");
+            // console.log("submit was clicked!")
             next.style.opacity = "100";
             next.style.cursor = "pointer";
             event.target.style.opacity = "50%";
@@ -239,13 +247,13 @@ class Question {
         this.hintClicked = (event) => {
             this.hintUsed = true;
             this.hintActive = !this.hintActive;
-            console.log("Hint was clicked")
+            // console.log("Hint was clicked")
             if (this.hintActive) {
-                console.log("hint showing")
+                // console.log("hint showing")
                 hintContainer.style.display = "flex";
                 hintContainer.style.opacity = "100%";
             } else {
-                console.log("hint hiding")
+                // console.log("hint hiding")
                 hintContainer.style.display = "none";
                 hintContainer.style.opacity = "0";
             }
@@ -259,16 +267,54 @@ class Question {
         }
         close_hint_btn.addEventListener("click", this.close_hint);
 
-        for (const ansChoice of document.getElementsByClassName("answer-choice")) {
+        const ansChoices = document.getElementsByClassName("answer-choice");
+        for (const ansChoice of ansChoices) {
             ansChoice.addEventListener("click", this.answerChoiceClicked)
         }
 
-        const next = document.getElementById("next-button");
         this.launchNextQuestion = (event) => {
+            if (this.submitted) {
+                // console.log("next clicked");
 
+                this.history.addQuestion(`${this.current_question[0]}(${this.current_question[1]})`, this.correct_answer);
+
+                this.resetUI(next, submit, ansChoices, hintContainer);
+
+                this.generateQuestion();
+                this.submitted = false;
+                this.hintActive = false;
+
+                this.updateUI();
+            }
         }
         next.addEventListener("click", this.launchNextQuestion);
 
+    }
+
+    resetUI(next, submit, ansChoices, hintContainer) {
+        next.style.opacity = "0";
+        next.style.cursor = "default";
+        submit.style.opacity = "100";
+        submit.style.cursor = "pointer";
+
+        let allChosen = document.getElementsByClassName("chosen-answer-choice");
+        for (let chosen of allChosen) {
+            chosen.classList.remove("chosen-answer-choice")
+        }
+
+        for (const ansChoice of ansChoices) {
+            ansChoice.style.border = "solid 3px transparent";
+            ansChoice.style.backgroundColor = "rgb(227, 183, 160)";
+        }
+
+        for (const angle of this.unit_circle.deg_array) {
+            const line = document.getElementById(`line-${angle}`);
+            line.style.stroke = "rgb(79, 111, 82)";
+            line.style.strokeWidth = "1.5";
+        }
+
+        hintContainer.style.display = "none";
+        hintContainer.style.opacity = "0";
     }
 
     updateUI() {
