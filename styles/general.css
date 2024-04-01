@@ -20,14 +20,14 @@
     padding-left: 40px;
 }
 
-/* #history-footer {
+#history-footer {
     padding-left: 0px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     text-align: center;
-} */
+}
 
 #pg-num {
     align-self: center;

@@ -104,7 +104,6 @@ class Question {
     }
 
     generateQuestion() {
-        this.total_count += 1;
         this.submitted = false;
         this.generateQuestionSettings();
         this.current_answer_choices = this.generateAnswerChoices();
@@ -214,6 +213,10 @@ class Question {
                 }
             }
         }
+        this.total_count += 1;
+        let score = document.getElementById("score");
+        score.innerHTML = `Score: ${this.correct_count}/${this.total_count}`;
+
     }
 
     answerChoiceClicked(event) {
