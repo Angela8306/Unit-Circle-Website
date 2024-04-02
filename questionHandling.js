@@ -70,10 +70,6 @@ class History {
         this.question_list.appendChild(newQuestion);
         // this.answers.push(answer)
     }
-
-    showAnswerToolTip() {
-
-    }
 }
 
 class Question {
