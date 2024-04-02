@@ -16,8 +16,40 @@
     background-color: rgb(237, 205, 187);
     padding-top: 5px;
 }
+
+::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(250, 218, 201);
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(227, 183, 160);
+    border: 0.15em solid rgb(250, 218, 201);
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(224, 170, 138);
+}
+
+#scroll-list {
+    width: 100%;
+    background: transparent;
+    height: 90vh;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
 #question-list {
-    padding-left: 40px;
+    display: flex;
+    padding-left: 0.5em;
+    flex-direction: column;
+    text-align: left;
+    list-style-position: inside;
 }
 
 #history-footer {
