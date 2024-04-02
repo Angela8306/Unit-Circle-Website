@@ -59,15 +59,16 @@ class UnitCircle {
 class History {
     constructor() {
         this.question_list = document.getElementById("question-list");
-        this.answers = [];
+        // this.answers = [];
     }
 
     addQuestion(question, answer) {
         let newQuestion = document.createElement("li");
+        newQuestion.setAttribute("answerToolTip", `Answer: ${answer}`);
         const text = document.createTextNode(`${question}`);
         newQuestion.appendChild(text);
         this.question_list.appendChild(newQuestion);
-        this.answers.push(answer)
+        // this.answers.push(answer)
     }
 
     showAnswerToolTip() {
@@ -98,6 +99,7 @@ class Question {
 
         this.current_question = [];
         this.current_answer_choices = [];
+        this.actual_answer = null;
         this.correct_answer = this.generateQuestion();
         this.updateUI();
         this.checkEvents();
@@ -120,6 +122,7 @@ class Question {
         this.correct_answer = this.unit_circle.xy_pts[`${xy_key}`][this.stems.indexOf(this.current_question[0])];
 
         // add correct answer that looks like a tool tip when hovering history question
+        this.actual_answer = this.correct_answer;
         console.log(`actual answer: ${this.correct_answer}`)
 
         if (!this.current_answer_choices.includes(this.correct_answer)){
@@ -279,7 +282,7 @@ class Question {
             if (this.submitted) {
                 // console.log("next clicked");
 
-                this.history.addQuestion(`${this.current_question[0]}(${this.current_question[1]})`, this.correct_answer);
+                this.history.addQuestion(`${this.current_question[0]}(${this.current_question[1]})`, this.actual_answer);
 
                 this.resetUI(next, submit, ansChoices, hintContainer);
 

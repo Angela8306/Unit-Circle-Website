@@ -41,7 +41,7 @@
     background: transparent;
     height: 90vh;
     overflow: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #question-list {
@@ -50,6 +50,40 @@
     flex-direction: column;
     text-align: left;
     list-style-position: inside;
+}
+
+li {
+    background-color: transparent;
+    cursor: pointer;
+}
+
+li:hover {
+    background-color: rgb(227, 183, 160);
+}
+
+li::before,
+li::after {
+    --scale: 0;
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    left: 165px;
+    transform: scale(var(--scale));
+    transition: 50ms transform;
+}
+
+li::before {
+    content: attr(answerToolTip);
+    color: black;
+    text-align: center;
+    padding-left: 2px;
+    padding-right: 2px;
+    background: rgb(227, 183, 160);
+    border-radius: .2em;
+}
+
+li:hover::before {
+    --scale: 1;
 }
 
 #history-footer {
