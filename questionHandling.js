@@ -59,6 +59,7 @@ class UnitCircle {
 class History {
     constructor() {
         this.question_list = document.getElementById("question-list");
+        this.placeholder = document.getElementById("placeholder-text");
         // this.answers = [];
     }
 
@@ -69,6 +70,10 @@ class History {
         newQuestion.appendChild(text);
         this.question_list.appendChild(newQuestion);
         // this.answers.push(answer)
+
+        if (this.question_list.children.length > 0) {
+            this.placeholder.style.display = "none";
+        }
     }
 }
 

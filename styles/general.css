@@ -103,6 +103,15 @@ li:hover::before {
     bottom: 5px;
 }
 
+#placeholder-text {
+    width: 150px;
+    left: 0px;
+    color: rgb(176, 91, 59);
+    font-style: italic;
+    text-align: center;
+    position: absolute;
+}
+
 #pg-num {
     align-self: center;
 }
